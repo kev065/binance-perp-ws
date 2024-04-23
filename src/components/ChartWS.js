@@ -38,16 +38,20 @@ function ChartWS() {
   const chartContainerRef = useRef();
   const chart = useRef();
   const series = useRef();
-  const { lastMessage } = useWebSocket(SOCKET_URL);
+  const { lastMessage, readyState } = useWebSocket(SOCKET_URL);
+
+  const isConnected = readyState === WebSocket.OPEN;
 
   const INTERVAL = 60 * 1000; // 1 minute in milliseconds
   const currentCandleStart = useRef(null);
   const currentCandle = useRef(null);
 
   useEffect(() => {
-    chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
-    series.current = chart.current.addCandlestickSeries();
-  }, []);
+    if (isConnected) {
+      chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
+      series.current = chart.current.addCandlestickSeries();
+    }
+  }, [isConnected]);
 
   useEffect(() => {
     if (lastMessage !== null) {
