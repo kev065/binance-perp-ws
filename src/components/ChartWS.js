@@ -40,6 +40,14 @@ const INTERVALS = {
   '1h': 'wss://fstream.binance.com/ws/btcusdt@kline_1h',
 };
 
+const INTERVAL_DURATIONS = {
+  '1m': 60 * 1000,
+  '3m': 3 * 60 * 1000,
+  '5m': 5 * 60 * 1000,
+  '15m': 15 * 60 * 1000,
+  '1h': 60 * 60 * 1000,
+};
+
 function ChartWS() {
   const [interval, setInterval] = useState('1m');
   const chartContainerRef = useRef();
@@ -69,7 +77,7 @@ function ChartWS() {
       const low = parseFloat(kline.l);
       const close = parseFloat(kline.c);
   
-      if (currentCandle.current === null || tradeTime - currentCandleStart.current >= INTERVALS[interval]) {
+      if (currentCandle.current === null || tradeTime - currentCandleStart.current >= INTERVAL_DURATIONS[interval]) {
         // Start a new candle
         if (currentCandle.current !== null) {
           series.current.update(currentCandle.current);
