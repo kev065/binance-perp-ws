@@ -3,6 +3,8 @@ import { createChart, CrosshairMode } from 'lightweight-charts';
 import useWebSocket from 'react-use-websocket';
 
 const CHART_OPTIONS = {
+  width: 800,
+  height: 600,
   layout: {
     backgroundColor: '#ffffff',
     textColor: 'rgba(33, 56, 77, 1)',
