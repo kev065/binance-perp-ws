@@ -74,6 +74,8 @@ function ChartWS() {
         currentCandle.current.low = Math.min(currentCandle.current.low, low);
         currentCandle.current.close = close;
       }
+      // Update the chart with the current candle data
+      series.current.update(currentCandle.current);
     }
   }, [lastMessage, INTERVAL]);
 
