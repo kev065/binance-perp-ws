@@ -53,19 +53,15 @@ function ChartWS() {
   const chartContainerRef = useRef();
   const chart = useRef();
   const series = useRef();
-  const { lastMessage, readyState } = useWebSocket(INTERVALS[interval]);
-
-  const isConnected = readyState === WebSocket.OPEN;
+  const { lastMessage } = useWebSocket(INTERVALS[interval]);
 
   const currentCandleStart = useRef(null);
   const currentCandle = useRef(null);
 
   useEffect(() => {
-    if (isConnected) {
-      chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
-      series.current = chart.current.addCandlestickSeries();
-    }
-  }, [isConnected]);
+    chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
+    series.current = chart.current.addCandlestickSeries();
+  }, []);
 
   useEffect(() => {
     if (lastMessage !== null) {
