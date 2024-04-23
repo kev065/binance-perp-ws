@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CrosshairMode } from 'lightweight-charts';
 import useWebSocket from 'react-use-websocket';
 
@@ -32,17 +32,23 @@ const CHART_OPTIONS = {
   },
 };
 
-const SOCKET_URL = 'wss://fstream.binance.com/ws/btcusdt@kline_1m';
+const INTERVALS = {
+  '1m': 60 * 1000,
+  '3m': 3 * 60 * 1000,
+  '5m': 5 * 60 * 1000,
+  '15m': 15 * 60 * 1000,
+  '1h': 60 * 60 * 1000,
+};
 
 function ChartWS() {
+  const [interval, setInterval] = useState('1m');
   const chartContainerRef = useRef();
   const chart = useRef();
   const series = useRef();
-  const { lastMessage, readyState } = useWebSocket(SOCKET_URL);
+  const { lastMessage, readyState } = useWebSocket(`wss://fstream.binance.com/ws/btcusdt@kline_${interval}`);
 
   const isConnected = readyState === WebSocket.OPEN;
 
-  const INTERVAL = 60 * 1000; // 1 minute in milliseconds
   const currentCandleStart = useRef(null);
   const currentCandle = useRef(null);
 
@@ -63,7 +69,7 @@ function ChartWS() {
       const low = parseFloat(kline.l);
       const close = parseFloat(kline.c);
   
-      if (currentCandle.current === null || tradeTime - currentCandleStart.current >= INTERVAL) {
+      if (currentCandle.current === null || tradeTime - currentCandleStart.current >= INTERVALS[interval]) {
         // Start a new candle
         if (currentCandle.current !== null) {
           series.current.update(currentCandle.current);
@@ -85,10 +91,19 @@ function ChartWS() {
       // Update the chart with the current candle data
       series.current.update(currentCandle.current);
     }
-  }, [lastMessage, INTERVAL]);
+  }, [lastMessage, interval]);
 
   return (
-    <div ref={chartContainerRef} />
+    <div>
+      <select value={interval} onChange={(e) => setInterval(e.target.value)}>
+        {Object.keys(INTERVALS).map((interval) => (
+          <option key={interval} value={interval}>
+            {interval}
+          </option>
+        ))}
+      </select>
+      <div ref={chartContainerRef} />
+    </div>
   );
 }
 
