@@ -59,9 +59,18 @@ function ChartWS() {
   const currentCandle = useRef(null);
 
   useEffect(() => {
-    chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
-    series.current = chart.current.addCandlestickSeries();
-  }, []);
+    if (chartContainerRef.current) {
+      // Remove the existing chart and series before creating a new one
+      if (chart.current) {
+        chart.current.remove();
+        chart.current = null;
+        series.current = null;
+      }
+  
+      chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
+      series.current = chart.current.addCandlestickSeries();
+    }
+  }, [interval]); // Added interval as a dependency
 
   useEffect(() => {
     if (lastMessage !== null) {
