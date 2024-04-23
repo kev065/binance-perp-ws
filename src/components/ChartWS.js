@@ -33,11 +33,11 @@ const CHART_OPTIONS = {
 };
 
 const INTERVALS = {
-  '1m': 60 * 1000,
-  '3m': 3 * 60 * 1000,
-  '5m': 5 * 60 * 1000,
-  '15m': 15 * 60 * 1000,
-  '1h': 60 * 60 * 1000,
+  '1m': 'wss://fstream.binance.com/ws/btcusdt@kline_1m',
+  '3m': 'wss://fstream.binance.com/ws/btcusdt@kline_3m',
+  '5m': 'wss://fstream.binance.com/ws/btcusdt@kline_5m',
+  '15m': 'wss://fstream.binance.com/ws/btcusdt@kline_15m',
+  '1h': 'wss://fstream.binance.com/ws/btcusdt@kline_1h',
 };
 
 function ChartWS() {
@@ -45,7 +45,7 @@ function ChartWS() {
   const chartContainerRef = useRef();
   const chart = useRef();
   const series = useRef();
-  const { lastMessage, readyState } = useWebSocket(`wss://fstream.binance.com/ws/btcusdt@kline_${interval}`);
+  const { lastMessage, readyState } = useWebSocket(INTERVALS[interval]);
 
   const isConnected = readyState === WebSocket.OPEN;
 
@@ -95,13 +95,11 @@ function ChartWS() {
 
   return (
     <div>
-      <select value={interval} onChange={(e) => setInterval(e.target.value)}>
-        {Object.keys(INTERVALS).map((interval) => (
-          <option key={interval} value={interval}>
-            {interval}
-          </option>
-        ))}
-      </select>
+      {Object.keys(INTERVALS).map((intervalKey) => (
+        <button key={intervalKey} onClick={() => setInterval(intervalKey)}>
+          {intervalKey}
+        </button>
+      ))}
       <div ref={chartContainerRef} />
     </div>
   );
