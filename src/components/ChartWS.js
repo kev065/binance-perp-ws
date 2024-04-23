@@ -1,30 +1,32 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart } from 'lightweight-charts';
+import { createChart, CrosshairMode } from 'lightweight-charts';
 import useWebSocket from 'react-use-websocket';
 
 const CHART_OPTIONS = {
-  width: 800,
-  height: 600,
   layout: {
-    backgroundColor: '#000',
-    textColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: '#ffffff',
+    textColor: 'rgba(33, 56, 77, 1)',
   },
   grid: {
-    vertLines: {
-      color: 'rgba(197, 203, 206, 0.5)',
-    },
     horzLines: {
-      color: 'rgba(197, 203, 206, 0.5)',
+      color: '#F0F3FA',
+    },
+    vertLines: {
+      color: '#F0F3FA',
     },
   },
   crosshair: {
-    mode: 1,
+    mode: CrosshairMode.Normal,
   },
-  rightPriceScale: {
-    borderColor: 'rgba(197, 203, 206, 0.8)',
+  priceScale: {
+    position: 'right',
+    mode: 1,
+    autoScale: true,
   },
   timeScale: {
-    borderColor: 'rgba(197, 203, 206, 0.8)',
+    timeVisible: true,
+    secondsVisible: false,
+    timezone: 'UTC',
   },
 };
 
