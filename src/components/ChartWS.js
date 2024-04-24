@@ -30,6 +30,14 @@ const CHART_OPTIONS = {
     secondsVisible: false,
     timezone: 'UTC',
   },
+  watermark: {
+    color: 'rgba(255, 0, 0, 1)', 
+    visible: true,
+    text: 'BTCUSDT', 
+    fontSize: 24,
+    horzAlign: 'center', 
+    vertAlign: 'center',
+  },
 };
 
 const INTERVALS = {
