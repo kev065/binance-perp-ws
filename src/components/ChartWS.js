@@ -68,14 +68,23 @@ function ChartWS() {
 
   useEffect(() => {
     if (chartContainerRef.current) {
-      // Remove the existing chart and series before creating a new one
+      // Removes the existing chart and series before creating a new one
       if (chart.current) {
         chart.current.remove();
         chart.current = null;
         series.current = null;
       }
   
-      chart.current = createChart(chartContainerRef.current, CHART_OPTIONS);
+      // Creates a new options object with the updated watermark text
+      const newChartOptions = {
+        ...CHART_OPTIONS,
+        watermark: {
+          ...CHART_OPTIONS.watermark,
+          text: `BTCUSDT | ${interval}`,
+        },
+      };
+  
+      chart.current = createChart(chartContainerRef.current, newChartOptions);
       series.current = chart.current.addCandlestickSeries();
     }
   }, [interval]); // Added interval as a dependency
